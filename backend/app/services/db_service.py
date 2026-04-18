@@ -13,19 +13,21 @@ def store_chunks_in_db(document_id: str, filename: str, chunks: list):
             document_id=document_id,
             filename=filename
         )
-        print("Storing in db")
+        print(filename)
         db.add(doc)
+        print("Storing in db1")
 
         # 2. store chunks
-        print(document_id)
-        print(type(document_id))
         for i, chunk in enumerate(chunks):
-            db.add(Chunk(
+            # print(type(chunk["page"]))
+            chunk_file=Chunk(
                 document_id=document_id,
                 chunk_index=i,
                 page=chunk["page"],
                 text=chunk["text"]
-            ))
+            )
+            db.add(chunk_file)
+            pass
         # print("Storing in db")
 
         db.commit()

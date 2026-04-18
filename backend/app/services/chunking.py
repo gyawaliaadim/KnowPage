@@ -64,7 +64,7 @@ def getPages(pagesRaw):
 
 def get_chunks(document_id,file_bytes):
     
-    if USE_CACHE and os.path.exists(DEV_CACHE_FILE):
+    if USE_CACHE:
         chunks = load_chunks()
     else:
         # convert file bytes to stream
