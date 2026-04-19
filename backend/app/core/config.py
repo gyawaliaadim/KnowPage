@@ -2,7 +2,7 @@
 
 DEV_DOC_ID = "docs_cache"
 
-USE_CACHE = True
+USE_CACHE = False
 
 CACHE_DIR = "cache"
 
