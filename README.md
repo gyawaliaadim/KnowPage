@@ -143,6 +143,11 @@ prototypes/
 <img width="1280" height="648" alt="Sematic retrievel in Jupyter notebook while I was experimenting" src="https://github.com/user-attachments/assets/4f19d443-9dcd-4e37-b9a7-671ec8eb2e73" />
 Sematic retrievel in Jupyter notebook while I was experimenting
 </div>
+
+<div>
+  <img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/17814077-caa1-4d5f-ba2b-2911509126f4" />
+Fast API backend's API endpoints
+</div>
 ---
 
 ---
