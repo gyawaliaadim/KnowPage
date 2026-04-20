@@ -5,6 +5,9 @@ export const metadata: Metadata = {
 };
 import LeftPanel from "@/components/LeftPanel";
 import MiddlePanel from "@/components/MiddlePanel";
+import dynamic from "next/dynamic"
+import RightPanel from "@/components/RightPanel";
+
 
 export default function DashboardLayout({
   children,
@@ -13,8 +16,9 @@ export default function DashboardLayout({
 }) {
   // temp dummy data (replace with real data later)
   const pdfs = [
-    { id: "1", name: "Physics Notes.pdf" },
-    { id: "2", name: "Math Formula.pdf" },
+    { id: "1", name: "Data Science.pdf" },
+    { id: "2", name: "PDF2.pdf" },
+
   ];
 
   const user = {
@@ -25,25 +29,26 @@ export default function DashboardLayout({
   return (
     <div className="flex">
       {/* LEFT PANEL */}
-      <div className="w-[15%]">
-      <LeftPanel pdfs={pdfs} user={user} />
+      <div className="w-[40%]">
+        <LeftPanel pdfs={pdfs} user={user} />
       </div>
 
       {/* MIDDLE PANEL */}
       <div
-      className="w-[50%]"
+        className="w-full"
       >
-      <MiddlePanel
-      />
-
+        {/* <MiddlePanel
+      /> */}
+        <MiddlePanel />
+      </div>
       {/* RIGHT PANEL */}
       <div
-      className="w-[35%]"
+        className="w-[60%]"
       >
-
+        <RightPanel/>
 
       </div>
-      </div>
+
     </div>
   );
 }
