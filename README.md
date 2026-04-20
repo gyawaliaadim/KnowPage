@@ -42,8 +42,8 @@ This system allows you to:
   - Chunks
 
 ### 🔹 Extras
-- Jupyter notebooks used for early experimentation and testing
-  **You can view the initial codes and experiments in /prototypes folder**
+- Jupyter notebooks used for early experimentation and testing.  
+**You can view the initial codes and experiments in** [Prototypes Repo](https://github.com/gyawaliaadim/KnowPagePrototypes)
 
 ---
 
