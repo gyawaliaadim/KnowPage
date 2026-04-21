@@ -1,18 +1,14 @@
+import requests
 import tiktoken
 import os
 import json
 from io import BytesIO
 from pypdf import PdfReader
-from core.config import USE_CACHE, CACHE_DIR, DEV_CACHE_FILE, DEV_DOC_ID, DEV_CACHE_FILE_PATH
-from ml.loader import get_enc,get_nlp
+from core.config import USE_CACHE, CACHE_DIR, DEV_CACHE_FILE, DEV_DOC_ID, DEV_CACHE_FILE_PATH, CHUNK_SIZE, OVERLAP,MODEL_URL
 import re
 
 
-enc=get_enc()
-nlp=get_nlp()
 
-def count_tokens(text):
-    return len(enc.encode(text))
 
 
 def clean_text(text):
@@ -23,61 +19,57 @@ def clean_text(text):
 
     return text.strip()
 
-def chunk_document(pages, chunk_size=300):
-    all_chunks = []
-    chunk_id = 0
+def chunk_document(pages, max_words=100, overlap_words=20):
+    chunks = []
 
-    for index,page in enumerate(pages):
-        sentences = page["sentences"]
+    for page_data in pages:
+        sentences = page_data["sentences"]
+
+        current_chunk = []
+        current_word_count = 0
+
         i = 0
-
-        print(i)
         while i < len(sentences):
-            current_chunk = []
-            current_tokens = 0
-            chunk_pages = set()
-            start_idx = i
+            sentence = sentences[i]
+            words = sentence.split()
+            word_count = len(words)
 
-            while i < len(sentences):
-                sent = sentences[i]
-                sent_tokens = count_tokens(sent)
+            # add sentence
+            current_chunk.append(sentence)
+            current_word_count += word_count
 
-                if current_tokens + sent_tokens > chunk_size:
-                    break
-
-                current_chunk.append(sent)
-                current_tokens += sent_tokens
-                chunk_pages.add(page["page"])
-                i += 1
-
-            # handle edge case: single long sentence
-            if not current_chunk and i < len(sentences):
-                current_chunk.append(sentences[i])
-                current_tokens = count_tokens(sentences[i])
-                chunk_pages.add(page["page"])
-                i += 1
-
-            chunk_text = clean_text(" ".join(current_chunk))
-
-            if is_valid_chunk(chunk_text):
-                all_chunks.append({
-                    "chunk_id": chunk_id,
-                    "pages": sorted(list(chunk_pages)),
-                    "text": chunk_text,
-                    "tokens": current_tokens,
-                    "num_sentences": len(current_chunk)
+            # if limit reached → save chunk
+            if current_word_count >= max_words:
+                chunks.append({
+                    "page": page_data["page"],
+                    "text": " ".join(current_chunk)
                 })
 
-                chunk_id += 1
+                # 🔁 overlap logic
+                overlap_chunk = []
+                overlap_count = 0
 
-            # overlap control (simple + safe)
-            overlap_sentences = 2
+                # take sentences from end until overlap_words reached
+                for s in reversed(current_chunk):
+                    w = len(s.split())
+                    overlap_chunk.insert(0, s)
+                    overlap_count += w
+                    if overlap_count >= overlap_words:
+                        break
 
-            i = i - overlap_sentences
-            if i < 0:
-                i = 0
+                current_chunk = overlap_chunk
+                current_word_count = overlap_count
 
-    return all_chunks
+            i += 1
+
+        # leftover
+        if current_chunk:
+            chunks.append({
+                "page": page_data["page"],
+                "text": " ".join(current_chunk)
+            })
+
+    return chunks
 def save_chunks(chunks):
     os.makedirs("cache", exist_ok=True)
     
@@ -110,8 +102,10 @@ def load_chunks():
 
 def split_sentences(text):
     
-    doc = nlp(text)
-    return [sent.text.strip() for sent in doc.sents if sent.text.strip()]
+    response = requests.post(f"{MODEL_URL}/nlp", json={"text": text})
+    response.raise_for_status() 
+    sentences = response.json()["sentences"]
+    return sentences
 
 
 def getPages(pages_raw):
@@ -135,17 +129,17 @@ def get_chunks(document_id,file_bytes):
     if USE_CACHE:
         chunks = load_chunks()
     else:
+
         # convert file bytes to stream
         file_stream = BytesIO(file_bytes)
         reader=PdfReader(file_stream)
-        print("Getting pages")
+
         pages=reader.pages
         pages=getPages(pages)
 
-        print("Chunking")
-        # Chunking
 
+        # Chunking
         chunks = chunk_document(pages)
-        print(len(chunks))
+        print(chunks)
         save_chunks(chunks)
     return chunks

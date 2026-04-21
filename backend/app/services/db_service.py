@@ -13,13 +13,13 @@ def store_chunks_in_db(document_id: str, filename: str, chunks: list):
             document_id=document_id,
             filename=filename
         )
-        doc2=Document(
-            document_id="hello12w",
-            filename="something12"
-        )
+        # doc2=Document(
+        #     document_id="hello12w",
+        #     filename="something12"
+        # )
         print(document_id, filename)
-        print("hellow", "something")
-        db.add(doc2)
+    
+        db.add(doc)
         print("Storing in db1")
 
         # 2. store chunks
@@ -31,7 +31,7 @@ def store_chunks_in_db(document_id: str, filename: str, chunks: list):
                 page=chunk["page"],
                 text=chunk["text"]
             )
-            # db.add(chunk_file)
+            db.add(chunk_file)
             
         # print("Storing in db")
 

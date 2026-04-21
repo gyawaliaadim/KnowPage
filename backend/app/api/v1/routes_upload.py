@@ -10,10 +10,10 @@ router = APIRouter()
 async def upload_pdf(file: UploadFile = File(...)):
     try:
         # 🔑 generate unique document id
-        if USE_CACHE:
-            document_id=DEV_DOC_ID
-        else:
-            document_id = str(uuid.uuid4())
+        # if USE_CACHE:
+            # document_id=DEV_DOC_ID
+        # else:
+        document_id = str(uuid.uuid4())
             
         # 📄 read file bytes
         contents = await file.read()
@@ -25,6 +25,7 @@ async def upload_pdf(file: UploadFile = File(...)):
             document_id=document_id,
             filename=file.filename
         )
+        print("Processing PDF...")
         process_pdf(pdf_data)
 
         return {

@@ -2,7 +2,7 @@
 from models.pdf_models import PdfData
 from services.chunking import get_chunks
 from services.db_service import store_chunks_in_db
-
+from services.vector_embeddings import get_embeddings
 
 
 def process_pdf(pdf_data:PdfData):
@@ -11,7 +11,9 @@ def process_pdf(pdf_data:PdfData):
     print(document_id)
     chunks = get_chunks(document_id,file_bytes)
 
+    print("Stored chunks in database")
     store_chunks_in_db(document_id,filename,chunks)
     
-    print("Stored chunks in database")
-    print(len(chunks))
+    embedding_matrix = get_embeddings(chunks)
+    print(embedding_matrix)
+    # print(len(chunks))
