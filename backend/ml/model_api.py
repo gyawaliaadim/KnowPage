@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from ml.loader import get_embedder, get_nlp
+from loader import get_embedder, get_nlp
 from app.core.config import BATCH_SIZE
 app = FastAPI(title="ML Model Service")
 
