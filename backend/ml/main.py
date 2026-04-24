@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from loader import get_embedder, get_nlp
+from ml.loader import get_embedder, get_nlp
 from app.core.config import BATCH_SIZE
 app = FastAPI(title="ML Model Service")
 
@@ -43,14 +43,30 @@ def embed(req: ListRequest):
 
 
 # ---- NLP pipeline endpoint ----
+from fastapi import UploadFile, File
+from pypdf import PdfReader
+
 @app.post("/nlp")
-def nlp(req: TextRequest):
-    print("Processing text with NLP pipeline...")
+def nlp(file: UploadFile = File(...)):
+    print("Processing full document...")
+
     nlp_model = get_nlp()
-    doc = nlp_model(req.text)
-    sentences = [sent.text.strip() for sent in doc.sents if sent.text.strip()]
-    return {
-        "sentences": sentences
-    }
+    reader = PdfReader(file.file)
 
+    pages = []
 
+    for i, page in enumerate(reader.pages):
+        text = page.extract_text() or ""
+
+        if text.strip():
+            doc = nlp_model(text)
+            sentences = [s.text.strip() for s in doc.sents if s.text.strip()]
+        else:
+            sentences = []
+
+        pages.append({
+            "page": i + 1,
+            "sentences": sentences
+        })
+
+    return {"pages": pages}

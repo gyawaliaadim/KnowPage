@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, Text
+from sqlalchemy import Column, String, Integer, Text, JSON
 from sqlalchemy.orm import DeclarativeBase
 
 class Base(DeclarativeBase):
@@ -16,7 +16,8 @@ class Chunk(Base):
     __tablename__ = "chunks"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    document_id = Column(String)
+    document_id = Column(String, index=True)
     chunk_index = Column(Integer)
     page = Column(Integer)
     text = Column(Text)
+    embedding = Column(JSON)  # stores vector list

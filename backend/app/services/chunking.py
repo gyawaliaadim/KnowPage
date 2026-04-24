@@ -1,4 +1,5 @@
 import requests
+from sqlalchemy import text
 import tiktoken
 import os
 import json
@@ -6,9 +7,9 @@ from io import BytesIO
 from pypdf import PdfReader
 from core.config import USE_CACHE, CACHE_DIR, DEV_CACHE_FILE, DEV_DOC_ID, DEV_CACHE_FILE_PATH, CHUNK_SIZE, OVERLAP,MODEL_URL
 import re
+from services.api_app import APIClient
 
-
-
+client = APIClient(MODEL_URL)
 
 
 def clean_text(text):
@@ -21,7 +22,7 @@ def clean_text(text):
 
 def chunk_document(pages, max_words=100, overlap_words=20):
     chunks = []
-
+    j=0
     for page_data in pages:
         sentences = page_data["sentences"]
 
@@ -42,7 +43,8 @@ def chunk_document(pages, max_words=100, overlap_words=20):
             if current_word_count >= max_words:
                 chunks.append({
                     "page": page_data["page"],
-                    "text": " ".join(current_chunk)
+                    "text": " ".join(current_chunk),
+                    "chunk_id": j
                 })
 
                 # 🔁 overlap logic
@@ -66,9 +68,10 @@ def chunk_document(pages, max_words=100, overlap_words=20):
         if current_chunk:
             chunks.append({
                 "page": page_data["page"],
-                "text": " ".join(current_chunk)
+                "text": " ".join(current_chunk),
+                "chunk_id": j
             })
-
+    j+=1
     return chunks
 def save_chunks(chunks):
     os.makedirs("cache", exist_ok=True)
@@ -100,46 +103,40 @@ def load_chunks():
     with open(DEV_CACHE_FILE_PATH, "r", encoding="utf-8") as f:
         return json.load(f)
 
-def split_sentences(text):
+# def getPages(pages_raw):
+#     return client.post("/nlp", json={"pages_raw": pages_raw})["pages"]
     
-    response = requests.post(f"{MODEL_URL}/nlp", json={"text": text})
-    response.raise_for_status() 
-    sentences = response.json()["sentences"]
-    return sentences
 
-
-def getPages(pages_raw):
-    pages = []
-
-    for i, page in enumerate(pages_raw):
-        text = page.extract_text()
-
-        if text.strip():
-            sentences = split_sentences(text)
-
-            pages.append({
-                "page": i + 1,
-                "sentences": sentences
-            })
-    return pages
-
-
-def get_chunks(document_id,file_bytes):
+# def get_chunks(document_id,file_bytes):
     
+#     if USE_CACHE:
+#         chunks = load_chunks()
+#     else:
+
+#         # convert file bytes to stream
+#         file_stream = BytesIO(file_bytes)
+#         reader=PdfReader(file_stream)
+
+#         pages=reader.pages
+#         pages=getPages(pages)
+
+
+#         # Chunking
+#         chunks = chunk_document(pages)
+#         print(chunks)
+#         save_chunks(chunks)
+#     return chunks
+
+
+def get_chunks(document_id, file_bytes):
     if USE_CACHE:
-        chunks = load_chunks()
-    else:
+        return load_chunks()
 
-        # convert file bytes to stream
-        file_stream = BytesIO(file_bytes)
-        reader=PdfReader(file_stream)
+    response = client.post_file("/nlp", file_bytes)
+    pages= response["pages"]
 
-        pages=reader.pages
-        pages=getPages(pages)
-
-
-        # Chunking
-        chunks = chunk_document(pages)
-        print(chunks)
-        save_chunks(chunks)
+    # print(pages[:2])
+    chunks= chunk_document(pages)
+    print(chunks[0:2])
+    save_chunks(chunks)
     return chunks
