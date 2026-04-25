@@ -29,7 +29,7 @@ def store_data_in_db(document_id: str, filename: str, data: list):
                 chunk_index=i,
                 page=chunk["page"],
                 text=chunk["text"],
-                # embedding=embedding   # ✅ FIXED HERE
+                embedding=embedding   # ✅ FIXED HERE
             )
             # print("Till here done")
 
