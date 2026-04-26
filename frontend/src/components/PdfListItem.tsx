@@ -1,13 +1,20 @@
 import React from "react";
-
+import { Button } from "./ui/button";
 type PdfListItemProps = {
   pdfName: string;
 };
 
 const PdfListItem = ({ pdfName }: PdfListItemProps) => {
-  return <div
-  className="flex items-center p-2e justify-start w-50 h-10 bg-gray-900 rounded-xl cursor-pointer hover:bg-black  transition-colors delay-75 ease-in"
-  >{pdfName}</div>;
+  return <Button
+
+  variant="outline"
+  className="w-full flex justify-start items-center  gap-2
+             hover:bg-blue-600 cursor-pointer hover:text-white hover:border-blue-600
+             transition"
+>
+  {pdfName}
+</Button>
+  
 };
 
 export default PdfListItem;

@@ -1,22 +1,31 @@
 import React from "react";
 import PdfListItem from "./PdfListItem";
-
+import { Button } from "./ui/button";
+import { CircleFadingArrowUpIcon } from "lucide-react"
 type Pdf = {
   id: string;
-  name: string;
+  document_id: string;
+  filename: string;
 };
 
 type LeftPanelProps = {
   pdfs: Pdf[];
-  user: {
-    name: string;
-    imageUrl: string;
-  };
 };
 
-const LeftPanel = ({ pdfs, user }: LeftPanelProps) => {
+
+const updatePdfs = (pdfs: Pdf[]): Pdf[] => {
+  return pdfs.map((pdf) => ({
+    ...pdf,
+    filename:
+      pdf.filename.length > 20
+        ? pdf.filename.slice(0, 17) + "..."
+        : pdf.filename,
+  }));
+};
+const LeftPanel = ({ pdfs }: LeftPanelProps) => {
+  const updatedPdfs= updatePdfs(pdfs);
   return (
-    <aside className="h-screen w-full bg-gray-900 gap-3 text-white flex flex-col justify-between p-4">
+    <aside className="h-screen w-full bg-gray-900 gap-3 text-white flex flex-col justify-between py-4 px-2">
       <div
       className="flex justify-start flex-col"
       >
@@ -30,10 +39,25 @@ const LeftPanel = ({ pdfs, user }: LeftPanelProps) => {
         {/* PDFs Section */}
 
           <div className="space-y-2">
+      <div className="">
+   
+
+<Button
+
+  variant="outline"
+  className="w-full flex items-center justify-center gap-2
+             hover:bg-blue-600 cursor-pointer hover:text-white hover:border-blue-600
+             transition"
+>
+  <CircleFadingArrowUpIcon className="h-4 w-4" />
+  Upload PDF
+</Button>
+  </div>
+
             {pdfs.map((pdf) => (
               <PdfListItem
               key={pdf.id}
-              pdfName={pdf.name}
+              pdfName={pdf.filename}
               />
             ))}
           </div>
@@ -43,22 +67,7 @@ const LeftPanel = ({ pdfs, user }: LeftPanelProps) => {
             </>
       </div>
       {/* BOTTOM USER CARD */}
-      <div className="bg-gray-800 h-auto p-3 rounded-xl flex items-center gap-3">
-        
-        {/* Avatar */}
-        <div className="w-10 h-10 rounded-full overflow-hidden">
-          <img
-            src={user.imageUrl}
-            alt="user"
-            className="w-full h-full object-cover"
-          />
-        </div>
-
-        {/* Name */}
-        <div className="text-sm font-medium">
-          {user.name}
-        </div>
-      </div>
+    
 
     </aside>
   );

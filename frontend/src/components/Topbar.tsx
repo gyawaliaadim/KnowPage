@@ -2,6 +2,7 @@
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { HamburgerMenuIcon } from '@radix-ui/react-icons';
 
 import {
   DropdownMenu,
@@ -12,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu"; 
 import { useNavigation } from '@/store/NavigationContext';
 import ToggleTheme from "@/components/ToggleTheme";
+
 
 export default function Topbar({ className }: { className?: string }) {
   const pathname = usePathname();
@@ -68,14 +70,13 @@ export default function Topbar({ className }: { className?: string }) {
       className="rounded-full w-10 h-10 focus:ring-2 focus:ring-gray-300 cursor-pointer flex items-center justify-center bg-gray-800 overflow-hidden"
       aria-label="User menu"
     >
-      
+      <HamburgerMenuIcon className="w-5 h-5 text-white" />
     </button>
   </DropdownMenuTrigger>
 
   <DropdownMenuContent align="end" className="w-56">
     <DropdownMenuLabel className="flex flex-col gap-1">
-      <span className="text-lg font-bold">User Name</span>
-      <span className="text-base text-gray-500 truncate">user@email.com</span>
+      <span className="text-lg font-bold">Info</span>
     </DropdownMenuLabel>
 
     <DropdownMenuItem
@@ -87,9 +88,15 @@ export default function Topbar({ className }: { className?: string }) {
 
     <DropdownMenuItem
       className="cursor-pointer"
-      onClick={() => console.log("Sign out")}
+      onClick={() => window.open("https://www.linkedin.com/in/aadimgyawali", "_blank")}
     >
-      Sign out
+      My Linkedin
+    </DropdownMenuItem>
+    <DropdownMenuItem
+      className="cursor-pointer"
+      onClick={() => window.open("https://github.com/gyawaliaadim", "_blank")}
+    >
+      My GitHub
     </DropdownMenuItem>
   </DropdownMenuContent>
 </DropdownMenu>
