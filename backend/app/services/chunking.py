@@ -20,7 +20,7 @@ def clean_text(text):
 
     return text.strip()
 
-def chunk_document(pages, max_words=100, overlap_words=20):
+def chunk_pdf(pages, max_words=100, overlap_words=20):
     chunks = []
     j=0
     for page_data in pages:
@@ -78,7 +78,7 @@ def save_chunks(chunks):
     
     # path = f"{CACHE_DIR}/{DEV_CACHE_FILE}"
     # else:
-        # path = f"cache/document"
+        # path = f"cache/pdf"
     with open(DEV_CACHE_FILE_PATH, "w", encoding="utf-8") as f:
         json.dump(chunks, f, ensure_ascii=False, indent=2)
 
@@ -107,7 +107,7 @@ def load_chunks():
 #     return client.post("/nlp", json={"pages_raw": pages_raw})["pages"]
     
 
-# def get_chunks(document_id,file_bytes):
+# def get_chunks(pdf_id,file_bytes):
     
 #     if USE_CACHE:
 #         chunks = load_chunks()
@@ -122,13 +122,13 @@ def load_chunks():
 
 
 #         # Chunking
-#         chunks = chunk_document(pages)
+#         chunks = chunk_pdf(pages)
 #         print(chunks)
 #         save_chunks(chunks)
 #     return chunks
 
 
-def get_chunks(document_id, file_bytes):
+def get_chunks(pdf_id, file_bytes):
     if USE_CACHE:
         return load_chunks()
 
@@ -136,7 +136,7 @@ def get_chunks(document_id, file_bytes):
     pages= response["pages"]
 
     # print(pages[:2])
-    chunks= chunk_document(pages)
+    chunks= chunk_pdf(pages)
     print(chunks[0:2])
     save_chunks(chunks)
     return chunks

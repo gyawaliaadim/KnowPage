@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from api.v1.routes_query import router as query_router
-from api.v1.documents import router as documents_router
+from api.v1.pdfs import router as pdfs_router
 
 
 app = FastAPI(title="RAG Backend")
@@ -18,7 +18,7 @@ app.add_middleware(
 
 # 🔌 Register routes
 app.include_router(query_router, prefix="/api/v1")
-app.include_router(documents_router, prefix="/api/v1")
+app.include_router(pdfs_router, prefix="/api/v1")
 
 
 # 🚀 Startup event (CRITICAL for local models)

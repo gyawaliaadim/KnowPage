@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 class QueryRequest(BaseModel):
-    document_id:str
+    pdf_id:str
     question:str
     
 

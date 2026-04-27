@@ -2,7 +2,7 @@ import Topbar from "@/components/Topbar";
 import Footer from "@/components/Footer";
 import type { Metadata } from "next";
 export const metadata: Metadata = {
-  title: 'Vision Board',
+  title: 'Know Page',
 };
 
 

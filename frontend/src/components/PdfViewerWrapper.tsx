@@ -8,9 +8,15 @@ const PdfViewer = dynamic(() => import("@/components/PdfViewer"), {
 });
 
 
-const PdfViewerWrapper = () => {
+type PdfViewerWrapperProp = {
+  pdf_id: string;
+};
+
+const PdfViewerWrapper = ({pdf_id}:PdfViewerWrapperProp) => {
   return (<>
-    <PdfViewer/>
+    <PdfViewer
+    pdf_id={pdf_id}
+    />
   </>
   )
 }

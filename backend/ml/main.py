@@ -48,7 +48,7 @@ from pypdf import PdfReader
 
 @app.post("/nlp")
 def nlp(file: UploadFile = File(...)):
-    print("Processing full document...")
+    print("Processing full pdf...")
 
     nlp_model = get_nlp()
     reader = PdfReader(file.file)

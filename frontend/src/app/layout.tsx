@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Vision Board",
-  description: "Be efficient!",
+  title: "Know Page",
+  description: "Learn and excel!",
 };
 
 export default function RootLayout({

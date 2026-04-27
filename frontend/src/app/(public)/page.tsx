@@ -14,7 +14,7 @@ const Home = () => {
       {/* Hero Section */}
       <div className="w-[75%] min-h-screen flex flex-col justify-center items-center gap-10">
         <h1 className="text-5xl sm:text-6xl font-extrabold text-blue-500 text-center leading-tight">
-          Talk to Your Documents, <br /> Not Your Search Bar
+          Talk to Your PDFs, <br /> Not Your Search Bar
         </h1>
         <p className="text-center text-xl sm:text-2xl text-black dark:text-white max-w-3xl">
           Upload PDFs and turn static data into a conversation. Our RAG-powered AI extracts context-aware answers directly from your files in seconds.

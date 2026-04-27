@@ -6,6 +6,7 @@ import { useRouter, usePathname } from 'next/navigation';
 interface NavigationContextType {
   isNavigating: boolean;
   navigate: (route: string) => void;
+  pathname: string;
 }
 
 const NavigationContext = createContext<NavigationContextType | undefined>(undefined);
@@ -22,14 +23,29 @@ export function NavigationProvider({ children }: { children: React.ReactNode }) 
     router.push(routeArg);
   };
 
-  useEffect(() => {
-    if (isNavigating && pathname === route) {
-      setIsNavigating(false);
-    }
-  }, [pathname, isNavigating, router, route]);
+  console.log(pathname,route)
+useEffect(() => {
+  let strippedroute: string | null = null;
 
+  if (route) {
+    strippedroute = String(route).endsWith("/")
+      ? route.slice(0, -1)
+      : route;
+  } else {
+    strippedroute = route;
+  }
+
+  const strippedPathname = String(pathname).endsWith("/")
+    ? pathname.slice(0, -1)
+    : pathname;
+
+  if (strippedPathname === strippedroute) {
+    console.log(pathname, route);
+    setIsNavigating(false);
+  }
+}, [pathname, isNavigating, route]);
   return (
-    <NavigationContext.Provider value={{ isNavigating, navigate }}>
+    <NavigationContext.Provider value={{ isNavigating, navigate, pathname }}>
       {children}
     </NavigationContext.Provider>
   );

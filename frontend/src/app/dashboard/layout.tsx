@@ -8,14 +8,14 @@ import MiddlePanel from "@/components/MiddlePanel";
 import RightPanel from "@/components/RightPanel";
 
 
-async function getDocuments() {
+async function getPDFs() {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/documents`,
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/pdfs`,
     { cache: "no-store" } // always fresh
   );
 
   if (!res.ok) {
-    throw new Error("Failed to fetch documents");
+    throw new Error("Failed to fetch PDFs");
   }
 
   return res.json();
@@ -30,7 +30,7 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }) {
   // temp dummy data (replace with real data later)
-  const pdfs = await getDocuments();
+  const pdfs = await getPDFs();
 
   return (
     <div className="flex">

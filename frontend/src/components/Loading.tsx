@@ -22,7 +22,7 @@ export default function LoadingTemplate({ children }: { children: ReactNode }) {
       // Wait 1s before showing overlay
       timer = setTimeout(() => {
         setDelayedShow(true);
-      }, 750);
+      }, 1);
     } else {
       // If things finish quickly, clear the timer and hide immediately
       setDelayedShow(false);

@@ -1,18 +1,19 @@
 from core.database import SessionLocal
-from models.db import Document, Chunk
+from models.db import PDF, Chunk
 
 
-def store_data_in_db(document_id: str, filename: str, data: list):
+def store_data_in_db(pdf_id: str, filename: str, data: list, file_bytes: bytes):
     db = SessionLocal()
 
     try:
-        # 1. store document metadata
-        doc = Document(
-            document_id=document_id,
-            filename=filename
+        # 1. store pdf metadata
+        doc = PDF(
+            pdf_id=pdf_id,
+            filename=filename,
+            file_bytes=file_bytes
         )
 
-        # print(f"Storing document: {document_id}, {filename}")
+        # print(f"Storing pdf: {pdf_id}, {filename}")
         db.add(doc)
 
         # 2. store chunks
@@ -25,7 +26,7 @@ def store_data_in_db(document_id: str, filename: str, data: list):
             if hasattr(embedding, "tolist"):
                 embedding = embedding.tolist()
             chunk_row = Chunk(
-                document_id=document_id,
+                pdf_id=pdf_id,
                 chunk_index=i,
                 page=chunk["page"],
                 text=chunk["text"],
