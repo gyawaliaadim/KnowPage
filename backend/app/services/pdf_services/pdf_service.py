@@ -1,8 +1,8 @@
 
 from models.pdf_models import PdfData
-from services.chunking import get_chunks
+from services.pdf_services.chunking_service import get_chunks
 from services.db_service import store_data_in_db
-from services.vector_embeddings import get_embeddings
+from services.pdf_services.embedding_service import get_embeddings
 import time
 
 def process_pdf(pdf_data:PdfData):

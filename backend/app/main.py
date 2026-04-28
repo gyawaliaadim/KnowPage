@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.v1.routes_query import router as query_router
+from api.v1.chat import router as chat_router
 from api.v1.pdfs import router as pdfs_router
 
 
@@ -17,7 +17,7 @@ app.add_middleware(
 )
 
 # 🔌 Register routes
-app.include_router(query_router, prefix="/api/v1")
+app.include_router(chat_router, prefix="/api/v1")
 app.include_router(pdfs_router, prefix="/api/v1")
 
 

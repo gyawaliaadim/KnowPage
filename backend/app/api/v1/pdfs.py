@@ -2,7 +2,7 @@ from fastapi import APIRouter, UploadFile, File, HTTPException
 from fastapi.responses import Response
 import uuid
 from models.pdf_models import PdfData
-from services.pdf_service import process_pdf
+from services.pdf_services.pdf_service import process_pdf
 from core.config import USE_CACHE, DEV_DOC_ID
 from sqlalchemy.orm import Session
 from core.database import SessionLocal

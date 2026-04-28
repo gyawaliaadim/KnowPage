@@ -1,10 +1,10 @@
 from pydantic import BaseModel
 
-class QueryRequest(BaseModel):
+class ChatRequest(BaseModel):
     pdf_id:str
     question:str
     
 
 
-class QueryResponse(BaseModel):
+class ChatResponse(BaseModel):
     pass
