@@ -10,8 +10,7 @@ def process_pdf(pdf_data:PdfData):
     pdf_id, filename, file_bytes = pdf_data.pdf_id, pdf_data.filename, pdf_data.file_bytes
 
     chunks = get_chunks(pdf_id,file_bytes)
-
-    print("Stored chunks in database")
+    print("Got chunks, generating embeddings...")
    
     embedding_matrix = get_embeddings(chunks)
   
@@ -24,6 +23,8 @@ def process_pdf(pdf_data:PdfData):
   }
   for i in range(len(chunks))
 ]
+    
+    # print(data[0]["page"])
     print("Connected embeddings and data")
     store_data_in_db(pdf_id,filename,data,file_bytes)
     print("Stored data in database")

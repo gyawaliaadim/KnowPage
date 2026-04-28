@@ -128,14 +128,12 @@ def load_chunks():
 
 
 def get_chunks(pdf_id, file_bytes):
-    if USE_CACHE:
-        return load_chunks()
-
+  
     response = client.post_file("/nlp", file_bytes)
     pages= response["pages"]
 
 
     chunks= chunk_pdf(pages)
 
-    save_chunks(chunks)
+    # print(chunks[0:5])
     return chunks

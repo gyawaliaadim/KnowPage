@@ -2,15 +2,17 @@ from fastapi import FastAPI
 from ml.loader import get_embedder, get_nlp
 from app.core.config import BATCH_SIZE
 
-from ml.routes.embed import router as embed_router
-from ml.routes.nlp import router as nlp_router
+from ml.routes.chat_services.embed import router as chat_embed_router
+
+from ml.routes.pdf_services.embed import router as embed_router
+from ml.routes.pdf_services.nlp import router as nlp_router
 
 app = FastAPI(title="ML Model Service")
 
 # ---- register routes ----
 app.include_router(embed_router)
 app.include_router(nlp_router)
-
+app.include_router(chat_embed_router)
 
 # ---- warm-up ----
 @app.on_event("startup")

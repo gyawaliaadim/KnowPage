@@ -7,7 +7,7 @@ import requests
 
 def embed_texts(text_list: list):
     response = requests.post(
-        f"{MODEL_URL}/embed",
+        f"{MODEL_URL}/embedTextList",
         json={"text": text_list}
     )
 
