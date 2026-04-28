@@ -17,10 +17,9 @@ def embed_texts(text_list: list):
 
 def get_embeddings(chunks):
     print("Generating embeddings...")
-    # print(chunks)
+
     texts=[chunk['text'] for chunk in chunks]
-    # if texts:
-        # print("hello")
+  
 
 
     embeddings_matrix = embed_texts(texts)

@@ -1,4 +1,5 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
+from fastapi.responses import Response
 import uuid
 from models.pdf_models import PdfData
 from services.pdf_service import process_pdf
@@ -92,8 +93,6 @@ def delete_pdf(pdf_id: str):
 
     return {"status": "deleted", "pdf_id": pdf_id}
 
-from fastapi import HTTPException
-from fastapi.responses import Response
 
 @router.get("/{pdf_id}/download")
 def download_pdf(pdf_id: str):

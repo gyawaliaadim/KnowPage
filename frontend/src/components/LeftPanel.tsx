@@ -5,15 +5,15 @@ import PdfListItem from "./PdfListItem";
 import { Button } from "./ui/button";
 import { CircleFadingArrowUpIcon } from "lucide-react"
 import { useNavigation } from "@/store/NavigationContext";
+import { useQuery } from "@tanstack/react-query";
+import { fetchPDFsFromAPI } from "@/lib/api";
+import Image from "next/image";
 type Pdf = {
   id: string;
   pdf_id: string;
   filename: string;
 };
 
-type LeftPanelProps = {
-  pdfs: Pdf[];
-};
 
 
 const updatePDFs = (pdfs: Pdf[]): Pdf[] => {
@@ -26,9 +26,14 @@ const updatePDFs = (pdfs: Pdf[]): Pdf[] => {
         : pdf.filename,
   }));
 };
-const LeftPanel = ({ pdfs }: LeftPanelProps) => {
+const LeftPanel = () => {
+  const { data: pdfs } = useQuery({
+  queryKey: ["pdfs"],
+  queryFn: fetchPDFsFromAPI,
+});
+
   const { navigate } = useNavigation();
-  const updatedPDFs= updatePDFs(pdfs);
+  const updatedPDFs= updatePDFs(pdfs?? []);
 
   return (
     <aside className="h-screen w-full bg-gray-900 gap-3 text-white flex flex-col justify-between py-4 px-2">
@@ -36,12 +41,23 @@ const LeftPanel = ({ pdfs }: LeftPanelProps) => {
       className="flex justify-start flex-col"
       >
       {/* TOP */}
-        <h1 className="cursor-pointer text-xl font-bold mb-6"
+        <div className="flex gap-2 justify-start items-center cursor-pointer text-xl font-bold mb-6"
         onClick={()=>navigate("/")}
-        >Know Page</h1>
+        >
+          
+          <span>
+            <Image
+            src="/logo.png"
+            width={50}
+            height={50}
+            alt="KnowPage Logo"
+            />
+          </span>
+          Know Page
+          </div>
 
         <>
-          <h2 className="text-sm text-gray-400 mb-2">PDFs</h2>
+          <div className="text-sm text-gray-400 mb-2">PDFs</div>
       < div className="h-fit overflow-y-auto">
 
         {/* PDFs Section */}
@@ -63,6 +79,7 @@ const LeftPanel = ({ pdfs }: LeftPanelProps) => {
   Upload PDF
 </Button>
   </div>
+<div className="flex flex-col gap-2 overflow-y-auto max-h-[calc(100vh-140px)] pr-2">
 
             {updatedPDFs.map((pdf,index) => (
               <PdfListItem
@@ -71,6 +88,7 @@ const LeftPanel = ({ pdfs }: LeftPanelProps) => {
               pdf_id={pdf.pdf_id}
               />
             ))}
+            </div>
           </div>
         
       </div>

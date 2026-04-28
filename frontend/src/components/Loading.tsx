@@ -6,10 +6,10 @@ import { useIsFetching } from "@tanstack/react-query";
 export default function LoadingTemplate({ children }: { children: ReactNode }) {
   const [mounted, setMounted] = useState(false);
   const [delayedShow, setDelayedShow] = useState(false);
-  const { isNavigating } = useNavigation();
+  const { isNavigating, isUploading } = useNavigation();
   const isFetching = useIsFetching();
 
-  const showOverlay = isNavigating || isFetching > 0;
+  const showOverlay = isNavigating || isUploading || isFetching  > 0;
 
   useEffect(() => {
     setMounted(true);

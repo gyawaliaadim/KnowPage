@@ -2,7 +2,7 @@
 
 DEV_DOC_ID = "docs_cache"
 BATCH_SIZE=32
-USE_CACHE = True
+USE_CACHE = False
 MODEL_NAME = "nomic-ai/nomic-embed-text-v1.5"
 CACHE_DIR = "cache"
 CHUNK_SIZE = 500

@@ -13,13 +13,11 @@ def store_data_in_db(pdf_id: str, filename: str, data: list, file_bytes: bytes):
             file_bytes=file_bytes
         )
 
-        # print(f"Storing pdf: {pdf_id}, {filename}")
         db.add(doc)
 
         # 2. store chunks
         for i, chunk in enumerate(data):
-            if i==1:
-                print(chunk)
+
             embedding = chunk["embedding"]
           
             # ensure it's JSON serializable (safety step)

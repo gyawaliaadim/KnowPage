@@ -3,6 +3,8 @@
 import { useState } from "react";
 import ChatHistory from "./ChatHistory";
 import UserQueryBox from "./UserQueryBox";
+import path from "path";
+
 
 type Message = {
   role: "user" | "ai";
@@ -38,7 +40,7 @@ const dummyMessages = [
 
 export default function RightPanel() {
   const [messages, setMessages] = useState<Message[]>([]);
-
+  
   const handleSend = (query: string) => {
     // Add user message
     setMessages((prev) => [...prev, { role: "user", text: query }]);
@@ -48,7 +50,7 @@ export default function RightPanel() {
   };
 
   return (
-    <div className="h-screen overflow-y-auto flex flex-col border-l">
+    <div className={`h-screen overflow-y-auto flex flex-col border-l `}>
       {/* Chat messages */}
       <ChatHistory messages={dummyMessages} />
 

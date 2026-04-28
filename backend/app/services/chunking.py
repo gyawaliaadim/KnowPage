@@ -82,7 +82,6 @@ def save_chunks(chunks):
     with open(DEV_CACHE_FILE_PATH, "w", encoding="utf-8") as f:
         json.dump(chunks, f, ensure_ascii=False, indent=2)
 
-    print("Saved cache at:", DEV_CACHE_FILE_PATH)
 
     return DEV_CACHE_FILE_PATH
 
@@ -123,7 +122,7 @@ def load_chunks():
 
 #         # Chunking
 #         chunks = chunk_pdf(pages)
-#         print(chunks)
+
 #         save_chunks(chunks)
 #     return chunks
 
@@ -135,8 +134,8 @@ def get_chunks(pdf_id, file_bytes):
     response = client.post_file("/nlp", file_bytes)
     pages= response["pages"]
 
-    # print(pages[:2])
+
     chunks= chunk_pdf(pages)
-    print(chunks[0:2])
+
     save_chunks(chunks)
     return chunks

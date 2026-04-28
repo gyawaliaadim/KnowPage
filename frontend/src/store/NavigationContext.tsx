@@ -5,13 +5,17 @@ import { useRouter, usePathname } from 'next/navigation';
 
 interface NavigationContextType {
   isNavigating: boolean;
+  isUploading: boolean;
   navigate: (route: string) => void;
   pathname: string;
+  setIsNavigating: (n: boolean) => void;
+  setIsUploading: (b: boolean) => void;
 }
 
 const NavigationContext = createContext<NavigationContextType | undefined>(undefined);
 
 export function NavigationProvider({ children }: { children: React.ReactNode }) {
+  const [isUploading, setIsUploading] = useState(false);
   const [isNavigating, setIsNavigating] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
@@ -45,7 +49,16 @@ useEffect(() => {
   }
 }, [pathname, isNavigating, route]);
   return (
-    <NavigationContext.Provider value={{ isNavigating, navigate, pathname }}>
+    <NavigationContext.Provider
+  value={{
+    isNavigating,
+    navigate,
+    pathname,
+    setIsNavigating,
+    isUploading,
+    setIsUploading
+  }}
+>
       {children}
     </NavigationContext.Provider>
   );

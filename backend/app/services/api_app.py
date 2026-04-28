@@ -15,7 +15,6 @@ class APIClient:
 
     # ---------- POST (JSON) ----------
     def post(self, endpoint, data=None):
-        print(data)
         url = f"{self.base_url}/{endpoint.lstrip('/')}"
         res = requests.post(url, json=data, timeout=self.timeout)
         res.raise_for_status()
