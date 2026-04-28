@@ -1,7 +1,20 @@
 from core.database import SessionLocal
-from models.db import PDF, Chunk
+from models.db import PDF, Chunk, Message
+from sqlalchemy.orm import Session
 
-
+def store_message(pdf_id: str, role: str, content: str):
+    db = SessionLocal()
+    try:
+        msg = Message(
+            pdf_id=pdf_id,
+            role=role,
+            content=content
+        )
+        db.add(msg)
+        db.commit()
+        return msg
+    finally:
+        db.close()
 def store_data_in_db(pdf_id: str, filename: str, data: list, file_bytes: bytes):
     db = SessionLocal()
 

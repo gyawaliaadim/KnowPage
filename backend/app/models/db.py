@@ -1,4 +1,6 @@
-from sqlalchemy import Column, String, Integer, Text, JSON, LargeBinary, ForeignKey
+from datetime import datetime
+
+from sqlalchemy import Column, String, Integer, Text, JSON, LargeBinary, ForeignKey, DateTime
 from sqlalchemy.orm import DeclarativeBase, relationship
 
 class Base(DeclarativeBase):
@@ -22,3 +24,12 @@ class Chunk(Base):
     text = Column(Text)
     embedding = Column(JSON)  # stores vector list
     pdf = relationship("PDF", back_populates="chunks")
+
+class Message(Base):
+    __tablename__ = "messages"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    pdf_id = Column(String, index=True)   # key idea
+    role = Column(String)                 # "user" | "assistant"
+    content = Column(Text)
+    created_at = Column(DateTime, default=datetime.utcnow)

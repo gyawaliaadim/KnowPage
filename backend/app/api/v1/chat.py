@@ -1,4 +1,7 @@
 from fastapi import APIRouter, HTTPException
+from requests import Session
+from core.database import SessionLocal
+from models.db import Message
 from models.schemas import ChatRequest, ChatResponse
 from services.chat_services.chat_service import chat
 
@@ -8,12 +11,37 @@ router = APIRouter(prefix="/chat", tags=["Chat"])
 def chat_docs(request: ChatRequest):
     try:
 
-        answer = chat(request)
-        print(request)
+        chat(request)
+        # print(request)
         return ChatResponse(
-            answer=answer,
+            
             status="success"
         )
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+@router.get("/{pdf_id}")
+def get_chat_history(pdf_id: str):
+    db: Session = SessionLocal()
+
+    try:
+        messages = (
+            db.query(Message)
+            .filter(Message.pdf_id == pdf_id)
+            .order_by(Message.created_at.asc())  # important for chat order
+            .all()
+        )
+
+        return [
+            {
+                "id": msg.id,
+                "role": msg.role,
+                "content": msg.content,
+                "created_at": msg.created_at
+            }
+            for msg in messages
+        ]
+
+    finally:
+        db.close()

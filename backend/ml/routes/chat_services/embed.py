@@ -2,12 +2,12 @@ from fastapi import APIRouter
 from pydantic import BaseModel
 from ml.loader import get_embedder
 
-router = APIRouter(prefix="/embedChat", tags=["EmbedChat"])
+router = APIRouter()
 
 class ChatRequest(BaseModel):
     text: str
 
-@router.post("/")
+@router.post("/embedChat")
 def embed(req: ChatRequest):
     # print("Generating embedding...")
     # print(req.text)

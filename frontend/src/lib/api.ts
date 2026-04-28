@@ -33,3 +33,16 @@ export const deletePDFFromAPI = async (pdf_id: string) => {
 
   return await res.json();
 };
+
+// lib/api.ts
+export const fetchChatMessages = async (pdf_id: string) => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/chat/${pdf_id}`
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch chat messages");
+  }
+
+  return res.json();
+};
