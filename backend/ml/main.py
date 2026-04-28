@@ -1,18 +1,18 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
 from ml.loader import get_embedder, get_nlp
 from app.core.config import BATCH_SIZE
+
+from ml.routes.embed import router as embed_router
+from ml.routes.nlp import router as nlp_router
+
 app = FastAPI(title="ML Model Service")
 
-# ---- request schema ----
-class ListRequest(BaseModel):
-    text: list[str]
-    
-class TextRequest(BaseModel):
-    text: str
+# ---- register routes ----
+app.include_router(embed_router)
+app.include_router(nlp_router)
 
 
-# ---- warm-up on startup ----
+# ---- warm-up ----
 @app.on_event("startup")
 def startup():
     print("Loading models...")
@@ -24,49 +24,3 @@ def startup():
 @app.get("/health")
 def health():
     return {"status": "healthy"}
-
-# ---- embedding endpoint ----
-@app.post("/embed")
-def embed(req: ListRequest):
-    print("Generating embedding...")
-    model = get_embedder()
-
-    vectors = model.encode(
-        req.text,
-        batch_size=BATCH_SIZE,
-        normalize_embeddings=True
-    )
-
-    return {
-        "embedding": vectors.tolist()
-    }
-
-
-# ---- NLP pipeline endpoint ----
-from fastapi import UploadFile, File
-from pypdf import PdfReader
-
-@app.post("/nlp")
-def nlp(file: UploadFile = File(...)):
-    print("Processing full pdf...")
-
-    nlp_model = get_nlp()
-    reader = PdfReader(file.file)
-
-    pages = []
-
-    for i, page in enumerate(reader.pages):
-        text = page.extract_text() or ""
-
-        if text.strip():
-            doc = nlp_model(text)
-            sentences = [s.text.strip() for s in doc.sents if s.text.strip()]
-        else:
-            sentences = []
-
-        pages.append({
-            "page": i + 1,
-            "sentences": sentences
-        })
-
-    return {"pages": pages}
