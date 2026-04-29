@@ -85,16 +85,15 @@ npm run dev
 ```bash
 cd backend
 pip install -r requirements.txt
-cd app
-fastapi dev main.py
+uvicorn app.main:app --reload --port 8000
 ```
 
 ### 4. Start the ML Service
 
 ```bash
 # In a new terminal, from the project root
-cd backend/ml
-uvicorn main:app --port 8001
+cd backend
+uvicorn nl.main:app --port 8001
 ```
 
 All three services need to be running simultaneously. Once up, open [http://localhost:3000](http://localhost:3000) in your browser.
@@ -115,6 +114,7 @@ FastAPI Backend (8000)  ──────►  ML Service (8001)
 
 ---
 
+
 ## 💡 Why RAG?
 
 Traditional LLMs answer from their training data — which is static, potentially outdated, and unaware of your private documents. RAG solves this by:
@@ -126,6 +126,14 @@ Traditional LLMs answer from their training data — which is static, potentiall
 Think of it like a smart librarian: you ask a question, it finds the most relevant pages, and explains the answer using exactly those pages.
 
 ---
+
+## Screenshots
+<img width="1920" height="1080" alt="s1" src="https://github.com/user-attachments/assets/8e1af5af-4355-4f83-90c2-3ee270e1e5cf" />
+<img width="1920" height="1080" alt="s2" src="https://github.com/user-attachments/assets/ee4cd02c-62af-4330-9b7a-ab1ef33da197" />
+<img width="1365" height="767" alt="s4" src="https://github.com/user-attachments/assets/192ca715-b618-4b76-a1ca-3cb4a9ba0cf6" />
+<img width="1918" height="1078" alt="s1" src="https://github.com/user-attachments/assets/134d6eb8-2051-4e2d-9c72-56c890734540" />
+<img width="1920" height="1020" alt="s3" src="https://github.com/user-attachments/assets/a101c626-9419-4104-8f9a-a4e36e0ea729" />
+
 
 ## 🤝 Contributing
 
