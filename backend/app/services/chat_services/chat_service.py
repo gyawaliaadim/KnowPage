@@ -42,7 +42,11 @@ def chat(req: ChatRequest):
     context = "\n\n".join(top_chunks)
     
     prompt = f"""
-You are an AI assistant. Answer the question using ONLY the context below. But if the context does not contain the answer, say you don't know. Be concise and try to answer it on the basis of the question.
+You are an AI assistant.
+Answer the question using ONLY the provided context.
+If the answer is not in the context, respond with: “I don’t know.”
+Do not guess or add extra information.
+Be short, direct, and factual.
 
 Context:
 {context}
@@ -56,5 +60,5 @@ Answer:
     print(response["response"])
     store_message(req.pdf_id, "assistant", response["response"])
 
-
+    return response["response"]
     

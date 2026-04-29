@@ -43,6 +43,30 @@ export const fetchChatMessages = async (pdf_id: string) => {
   if (!res.ok) {
     throw new Error("Failed to fetch chat messages");
   }
+  let response = res.json();
+  console.log(response)
+  return response;
+};
+
+
+export const sendQuestion = async (pdf_id: string, question: string) => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/chat`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        pdf_id,
+        question,
+      }),
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to send question");
+  }
 
   return res.json();
 };

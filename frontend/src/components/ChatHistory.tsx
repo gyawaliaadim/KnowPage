@@ -2,7 +2,7 @@
 
 type Message = {
   role: "user" | "ai";
-  text: string;
+  content: string;
 };
 
 type Props = {
@@ -26,7 +26,7 @@ export default function ChatHistory({ messages }: Props) {
                 : "bg-gray-200 text-black"
             }`}
           >
-            {msg.text}
+            {msg.content}
           </div>
         </div>
       ))}

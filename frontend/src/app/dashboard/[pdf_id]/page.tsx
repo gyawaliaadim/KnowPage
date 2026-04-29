@@ -25,6 +25,7 @@ export default async function Page({ params }: Props) {
      <div
         className="w-[60%]"
       >
+        
         <RightPanel
         pdf_id={pdf_id}
         />
