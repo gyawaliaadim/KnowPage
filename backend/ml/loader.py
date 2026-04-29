@@ -1,12 +1,11 @@
 from functools import lru_cache
 import spacy
 from sentence_transformers import SentenceTransformer
-from app.core.config import MODEL_NAME
 
 @lru_cache(maxsize=1)
 def get_embedder():
     print("Loading embedder...")
-    return SentenceTransformer(MODEL_NAME)
+    return SentenceTransformer("nomic-ai/nomic-embed-text-v1.5")
 
 @lru_cache(maxsize=1)
 def get_nlp():

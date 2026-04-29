@@ -9,8 +9,7 @@ class ChatRequest(BaseModel):
 
 @router.post("/embedChat")
 def embed(req: ChatRequest):
-    # print("Generating embedding...")
-    # print(req.text)
+    
     model = get_embedder()
 
     vectors = model.encode(

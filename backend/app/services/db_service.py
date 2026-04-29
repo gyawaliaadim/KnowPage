@@ -1,10 +1,9 @@
-from core.database import SessionLocal
-from models.db import PDF, Chunk, Message
+from app.core.database import SessionLocal
+from app.models.db import PDF, Chunk, Message
 from sqlalchemy.orm import Session
 
 def store_message(pdf_id: str, role: str, content: str, contexts: list[dict] | None = None):
     db = SessionLocal()
-    print(contexts)
     try:
         msg = Message(
             pdf_id=pdf_id,

@@ -1,10 +1,10 @@
 
 
-from models.schemas import ChatRequest
-from services.api_app import APIClient
-from services.chat_services.llm_service import call_llm
-from core.config import MODEL_URL
-from services.db_service import get_chunks_from_db, store_message
+from app.models.schemas import ChatRequest
+from app.services.api_app import APIClient
+from app.services.chat_services.llm_service import call_llm
+from app.core.config import MODEL_URL
+from app.services.db_service import get_chunks_from_db, store_message
 import numpy as np
 
 def cosine_similarity(a, b):
@@ -20,7 +20,7 @@ def chat(req: ChatRequest):
 
     chat_embedding = client.post('/embedChat', data = {"text": req.question})["embedding"]
     chunks = get_chunks_from_db(req.pdf_id)
-    # print(chunks)
+
     results = []
 
     for chunk in chunks:
@@ -41,7 +41,6 @@ def chat(req: ChatRequest):
     "question": req.question,
     "chunks": chunks_to_rank
 }
-    print(data)
     ranked = client.post('/rank', data = data)["ranked_chunks"]
     
     top_chunks = [c["text"] for c in ranked]
@@ -71,10 +70,8 @@ Answer:
     for c in ranked[:3]
 ]
 
-    print(prompt)
     response = call_llm(prompt)
-    print(response["response"])
-    print(top_chunks_to_store)
+    print("Storing assistant response in DB...")
     store_message(req.pdf_id, "assistant", response["response"], contexts=top_chunks_to_store
 
                   )

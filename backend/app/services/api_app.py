@@ -15,6 +15,7 @@ class APIClient:
 
     # ---------- POST (JSON) ----------
     def post(self, endpoint, data=None):
+        print("POST", endpoint)
         url = f"{self.base_url}/{endpoint.lstrip('/')}"
         res = requests.post(url, json=data, timeout=self.timeout)
         res.raise_for_status()
@@ -22,6 +23,7 @@ class APIClient:
     
 
     def post_file(self, endpoint, file_bytes):
+        print("POST FILE", endpoint)
         url = f"{self.base_url}/{endpoint.lstrip('/')}"
 
         files = {"file": ("doc.pdf", file_bytes)}

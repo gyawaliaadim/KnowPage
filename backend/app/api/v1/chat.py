@@ -1,9 +1,9 @@
 from fastapi import APIRouter, HTTPException
 from requests import Session
-from core.database import SessionLocal
-from models.db import Message
-from models.schemas import ChatRequest, ChatResponse
-from services.chat_services.chat_service import chat
+from app.core.database import SessionLocal
+from app.models.db import Message
+from app.models.schemas import ChatRequest, ChatResponse
+from app.services.chat_services.chat_service import chat
 
 router = APIRouter(prefix="/chat", tags=["Chat"])
 
@@ -12,7 +12,6 @@ def chat_docs(request: ChatRequest):
     try:
 
         chat(request)
-        # print(request)
         return ChatResponse(
             
             status="success"

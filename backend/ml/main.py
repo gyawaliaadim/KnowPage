@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 from ml.loader import get_embedder, get_nlp
-from app.core.config import BATCH_SIZE
 
 from ml.routes.chat_services.embed import router as chat_embed_router
 from ml.routes.chat_services.rank import router as rank_router

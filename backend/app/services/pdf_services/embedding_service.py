@@ -1,5 +1,5 @@
 
-from core.config import BATCH_SIZE, MODEL_URL
+from app.core.config import BATCH_SIZE, MODEL_URL
 import requests
 # =========================
 # 4. EMBEDDING FUNCTION

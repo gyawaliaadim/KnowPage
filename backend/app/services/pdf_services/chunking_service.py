@@ -1,13 +1,9 @@
-import requests
-from sqlalchemy import text
-import tiktoken
+
 import os
 import json
-from io import BytesIO
-from pypdf import PdfReader
-from core.config import USE_CACHE, CACHE_DIR, DEV_CACHE_FILE, DEV_DOC_ID, DEV_CACHE_FILE_PATH, CHUNK_SIZE, OVERLAP,MODEL_URL
+from app.core.config import DEV_CACHE_FILE_PATH, MODEL_URL
 import re
-from services.api_app import APIClient
+from app.services.api_app import APIClient
 
 client = APIClient(MODEL_URL)
 
@@ -134,6 +130,4 @@ def get_chunks(pdf_id, file_bytes):
 
 
     chunks= chunk_pdf(pages)
-
-    # print(chunks[0:5])
     return chunks

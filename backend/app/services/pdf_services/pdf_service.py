@@ -1,8 +1,8 @@
 
-from models.pdf_models import PdfData
-from services.pdf_services.chunking_service import get_chunks
-from services.db_service import store_data_in_db
-from services.pdf_services.embedding_service import get_embeddings
+from app.models.pdf_models import PdfData
+from app.services.pdf_services.chunking_service import get_chunks
+from app.services.db_service import store_data_in_db
+from app.services.pdf_services.embedding_service import get_embeddings
 import time
 
 def process_pdf(pdf_data:PdfData):
@@ -23,8 +23,6 @@ def process_pdf(pdf_data:PdfData):
   }
   for i in range(len(chunks))
 ]
-    
-    # print(data[0]["page"])
     print("Connected embeddings and data")
     store_data_in_db(pdf_id,filename,data,file_bytes)
     print("Stored data in database")

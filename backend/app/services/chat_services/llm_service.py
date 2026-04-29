@@ -1,7 +1,9 @@
 import requests
 
+from app.core.config import LLM_URL
+
 def call_llm(prompt: str):
-    url = "http://localhost:11434/api/generate"
+    url = f"{LLM_URL}/api/generate"
 
     payload = {
         "model": "tinyllama",

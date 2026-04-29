@@ -1,12 +1,12 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
 from fastapi.responses import Response
 import uuid
-from models.pdf_models import PdfData
-from services.pdf_services.pdf_service import process_pdf
-from core.config import USE_CACHE, DEV_DOC_ID
+from app.models.pdf_models import PdfData
+from app.services.pdf_services.pdf_service import process_pdf
+from app.core.config import USE_CACHE, DEV_DOC_ID
 from sqlalchemy.orm import Session
-from core.database import SessionLocal
-from models.db import PDF
+from app.core.database import SessionLocal
+from app.models.db import PDF
 
 
 router = APIRouter(prefix="/pdfs", tags=["PDFs"])
@@ -23,7 +23,7 @@ async def upload_pdf(file: UploadFile = File(...)):
             
         # 📄 read file bytes
         contents = await file.read()
-        # print(file)
+
         # 🚀 process PDF (delegate to service layer)
         pdf_data: PdfData=PdfData(
             
@@ -47,8 +47,13 @@ async def upload_pdf(file: UploadFile = File(...)):
 @router.get("/")
 def get_pdfs():
     db: Session = SessionLocal()
-    pdfs = db.query(PDF).all()
-    db.close()
+    print("Fetching PDFs from database...")
+    try:
+        pdfs = db.query(PDF).all()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        db.close()
 
     return [
         {
@@ -64,8 +69,12 @@ from fastapi import HTTPException
 @router.get("/{pdf_id}")
 def get_pdf(pdf_id: str):
     db: Session = SessionLocal()
-    doc = db.query(PDF).filter(PDF.pdf_id == pdf_id).first()
-    db.close()
+    try:
+        doc = db.query(PDF).filter(PDF.pdf_id == pdf_id).first()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        db.close()
 
     if not doc:
         raise HTTPException(status_code=404, detail="PDF not found")
