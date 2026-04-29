@@ -1,177 +1,135 @@
-# 🧠 AI RAG System (Next.js + FastAPI)
-<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/65dd876a-489b-451c-a874-65ce6810e6a1" />
+# KnowPage
 
-A full-stack Retrieval-Augmented Generation (RAG) system that lets users upload PDFs, process them into chunks, and prepare them for semantic search using embeddings.
+> **Turn any PDF into a conversational knowledge base — powered by AI.**
 
-This project focuses on building a **clean, modular backend architecture** and connecting it with a modern frontend.
-
----
-
-# 🚀 Project Overview
-
-This system allows you to:
-
-1. Upload PDF documents
-2. Extract and process text
-3. Split text into token-aware chunks
-4. Convert chunks to vector embeddings
-5. Store processed data in a database
-7. Allow users to ask questions
-8. Use cosine similarity to semantic retrieval
-9. LLM to answer the questions according to user with the context of where it is using RAG
----
-
-# 🏗️ Architecture
-
-### 🔹 Frontend
-- Built with **Next.js + React + TypeScript**
-- Handles file uploads and UI interaction
-
-### 🔹 Backend
-- Built with **FastAPI**
-- Handles:
-  - PDF ingestion
-  - Text extraction
-  - Chunking logic
-  - API endpoints
-
-### 🔹 Database
-- **SQLite (dev)**
-- Stores:
-  - Documents
-  - Chunks
-
-### 🔹 Extras
-- Jupyter notebooks used for early experimentation and testing.  
-**You can view the initial codes and experiments in** [Prototypes Repo](https://github.com/gyawaliaadim/KnowPagePrototypes)
+KnowPage is a Retrieval-Augmented Generation (RAG) application that lets you upload PDFs and interact with them through natural language. Instead of manually skimming long documents, you ask questions and get precise, sourced answers — grounded in your actual content, not generic AI guesses. It is a project made for the **Hackspire Hackathon**.
 
 ---
 
-# ⚙️ Backend Design Principles
+## ✨ Features
 
-- Clean separation of concerns:
-  - `api/` → routes
-  - `services/` → business logic
-  - `models/` → database schemas
-  - `core/` → config & DB setup
-
-- Versioned API:
-  ```
-  /api/v1/
-  ```
-
-- Pipeline split into:
-  - **Ingestion time** (PDF → chunks → store)
-  - **Query time** (retrieval → LLM response)
+- 📄 **Upload & index** any PDF instantly
+- 💬 **Ask questions** in natural language
+- 🎯 **Context-aware answers** grounded in your document — not hallucinated
+- 🔍 **Source transparency** — every answer links back to the exact page and chunk it came from
+- ⚡ **No fine-tuning needed** — just upload and go
 
 ---
 
-# 📦 Features Implemented
+## 🧠 How It Works
 
-✅ PDF upload  
-✅ Text extraction  
-✅ Token-based chunking (with overlap)  
-✅ Page-aware chunk tracking  
-✅ SQLite storage  
-✅ Modular backend structure  
-✅ JSON caching (to avoid recomputation)  
+```
+PDF Upload → Text Extraction → Chunking → Embeddings (Vector Store)
+                                                        ↓
+User Query → Query Embedding → Semantic Search → Top Chunks
+                                                        ↓
+                                          Reranking + LLM Generation
+                                                        ↓
+                                         Answer + Source References
+```
 
----
-
-# 🧪 Tech Stack
-
-### Frontend
-- Next.js
-- React.js
-- TypeScript
-
-### Backend
-- FastAPI
-- Python
-- Pydantic
-
-### Database
-- SQLite
-
-### Tools
-- Jupyter Notebook
-- tiktoken (for chunking)
+1. **Upload** — User uploads a PDF via the UI
+2. **Processing** — Backend extracts text, splits it into chunks, and stores metadata (page number, chunk index)
+3. **Embeddings** — Each chunk is converted into a vector; semantically similar content maps to nearby positions in vector space
+4. **Retrieval** — On each query, the user's question is embedded and the most semantically relevant chunks are retrieved
+5. **Generation** — Retrieved chunks are reranked, then sent alongside the query to an LLM, which generates a grounded answer
 
 ---
 
-# ▶️ How to Run
+## 🏗️ Architecture
 
-## 🖥️ Frontend
+```
+knowpage/
+├── frontend/          # Next.js app (UI, PDF viewer, chat)
+├── backend/
+│   ├── app/           # FastAPI server (REST API, PDF management)
+│   └── ml/            # ML service (embeddings, retrieval, generation)
+```
+
+| Service | Tech | Port |
+|---|---|---|
+| Frontend | Next.js | 3000 |
+| Backend API | FastAPI | 8000 |
+| ML Service | FastAPI + Uvicorn | 8001 |
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- Python 3.10+
+- pip
+
+### 1. Clone the repository
 
 ```bash
-cd /frontend
+git clone https://github.com/gyawaliaadim/KnowPage
+cd KnowPage
+```
+
+### 2. Start the Frontend
+
+```bash
+cd frontend
 npm install
 npm run dev
 ```
 
----
-
-## ⚙️ Backend
+### 3. Start the Backend API
 
 ```bash
-cd /backend/app
+cd backend
+pip install -r requirements.txt
+cd app
 fastapi dev main.py
 ```
 
----
+### 4. Start the ML Service
 
-# 📂 Project Structure
-
-```
-backend/
-  app/
-    api/
-    services/
-    models/
-    core/
-    main.py
-
-frontend/
-  (Next.js app)
-
-prototypes/
+```bash
+# In a new terminal, from the project root
+cd backend/ml
+uvicorn main:app --port 8001
 ```
 
----
-# 📷 Screenshots
-<div>
-<img width="1280" height="648" alt="Sematic retrievel in Jupyter notebook while I was experimenting" src="https://github.com/user-attachments/assets/4f19d443-9dcd-4e37-b9a7-671ec8eb2e73" />
-Sematic retrievel in Jupyter notebook while I was experimenting
-</div>
-
-<div>
-  <img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/17814077-caa1-4d5f-ba2b-2911509126f4" />
-Fast API backend's API endpoints
-</div>
----
+All three services need to be running simultaneously. Once up, open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-# 🧠 Key Learnings
+## 🔄 Request Flow
 
-- Separating routes, services, and models makes scaling easier
-- File handling in FastAPI requires correct `multipart/form-data`
-- Python import paths depend heavily on working directory
-- Small data type mistakes (like tuple vs string) can break DB logic
-- RAG systems must separate ingestion and retrieval phases
-
----
-
-# 🚀 Future Improvements
-
-- Integrate vector database (pgvector / FAISS / Chroma)
-- Optimize performance with background tasks
-- Containerize it using docker
+```
+Browser (Next.js)
+      │
+      ▼
+FastAPI Backend (8000)  ──────►  ML Service (8001)
+      │                          (embed, retrieve, rerank, generate)
+      ▼
+  SQLite
+```
 
 ---
 
-# 🎯 Goal
+## 💡 Why RAG?
 
-This project evolves from simple PDF parsing into a **production-style RAG backend system**, focusing on scalability, structure, and real-world engineering practices.
+Traditional LLMs answer from their training data — which is static, potentially outdated, and unaware of your private documents. RAG solves this by:
+
+- **Grounding** responses in your actual content
+- **Citing sources** so you can verify every answer
+- **Staying current** — no retraining needed when documents change
+
+Think of it like a smart librarian: you ask a question, it finds the most relevant pages, and explains the answer using exactly those pages.
 
 ---
+
+## 🤝 Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you'd like to change.
+
+---
+
+## 📄 License
+
+[MIT](LICENSE)
