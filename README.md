@@ -1,5 +1,8 @@
 # KnowPage
 
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/96a8989e-9a60-4c31-b5cd-f88afd1a8bd5" />
+
+
 > **Turn any PDF into a conversational knowledge base — powered by AI.**
 
 KnowPage is a Retrieval-Augmented Generation (RAG) application that lets you upload PDFs and interact with them through natural language. Instead of manually skimming long documents, you ask questions and get precise, sourced answers — grounded in your actual content, not generic AI guesses. It is a project made for the **Hackspire Hackathon**.
