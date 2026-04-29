@@ -10,7 +10,7 @@
 
   export default function RightPanel({ pdf_id }: { pdf_id: string }) {
       const queryClient = useQueryClient();  
-        const { setIsUploading, navigate } = useNavigation();
+        const { setIsResponding, navigate } = useNavigation();
     const { data: messages, isLoading } = useQuery({
       queryKey: ["chat", pdf_id],
       queryFn: () => fetchChatMessages(pdf_id),
@@ -18,18 +18,32 @@
     });
     
   const handleSend = async (question: string) => {
+  const tempId = Date.now().toString();
+
+  // 1. Optimistically add ONLY user message
+  queryClient.setQueryData(["chat", pdf_id], (old: any) => {
+    return [
+      ...(old || []),
+      {
+        id: tempId,
+        role: "user",
+        content: question,
+      },
+    ];
+  });
+
   try {
-    setIsUploading(true);
+    setIsResponding(true);
 
-    const data = await sendQuestion(pdf_id, question);
+    // 2. Send question
+    await sendQuestion(pdf_id, question);
 
+    // 3. Refetch full chat (server returns AI response)
     await queryClient.invalidateQueries({ queryKey: ["chat", pdf_id] });
-
-    console.log("AI response:", data);
   } catch (err) {
     console.error(err);
   } finally {
-    setIsUploading(false);
+    setIsResponding(false);
   }
 };
     return (
