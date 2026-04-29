@@ -38,7 +38,8 @@ def get_chat_history(pdf_id: str):
                 "id": msg.id,
                 "role": msg.role,
                 "content": msg.content,
-                "created_at": msg.created_at
+                "created_at": msg.created_at,
+                "contexts": msg.contexts
             }
             for msg in messages
         ]

@@ -29,18 +29,24 @@ def chat(req: ChatRequest):
         results.append({
             "text": chunk.text,
             "page": chunk.page,
+            "chunk_id": chunk.id,
             "score": score
         })
     # sort highest similarity first
     results = sorted(results, key=lambda x: x["score"], reverse=True)
     top_k = results[:15]   # NOT 3, use 5
-    ranked = client.post('/rank', data = {
-        "question": req.question,
-        "chunks": [c["text"] for c in top_k]
-    })["ranked_chunks"]
-    top_chunks = [c["text"] for c in ranked]
-    context = "\n\n".join(top_chunks)
+    chunks_to_rank = [{"text": c["text"], "chunk_id": c["chunk_id"], "page": c["page"]} for c in top_k]
+    # print("Top chunks before ranking:", chunks_to_rank[0:1])
+    data={
+    "question": req.question,
+    "chunks": chunks_to_rank
+}
+    print(data)
+    ranked = client.post('/rank', data = data)["ranked_chunks"]
     
+    top_chunks = [c["text"] for c in ranked]
+    # print("Top chunks:", top_chunks)
+    context = "\n\n".join(top_chunks)
     prompt = f"""
 You are an AI assistant.
 Answer the question using ONLY the provided context.
@@ -56,9 +62,22 @@ Question:
 
 Answer:
 """
+    top_chunks_to_store = [
+    {
+        "chunk_id": c["chunk_id"],
+        "page": c["page"],
+        "score": c["score"]
+    }
+    for c in ranked[:3]
+]
+
+    print(prompt)
     response = call_llm(prompt)
     print(response["response"])
-    store_message(req.pdf_id, "assistant", response["response"])
+    print(top_chunks_to_store)
+    store_message(req.pdf_id, "assistant", response["response"], contexts=top_chunks_to_store
 
-    return response["response"]
+                  )
+
+    return True
     

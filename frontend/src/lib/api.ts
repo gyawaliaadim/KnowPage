@@ -44,7 +44,6 @@ export const fetchChatMessages = async (pdf_id: string) => {
     throw new Error("Failed to fetch chat messages");
   }
   let response = res.json();
-  console.log(response)
   return response;
 };
 

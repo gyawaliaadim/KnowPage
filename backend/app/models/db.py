@@ -32,4 +32,5 @@ class Message(Base):
     pdf_id = Column(String, index=True)   # key idea
     role = Column(String)                 # "user" | "assistant"
     content = Column(Text)
+    contexts = Column(JSON, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)

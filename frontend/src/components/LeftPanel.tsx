@@ -3,22 +3,20 @@
 import React from "react";
 import PdfListItem from "./PdfListItem";
 import { Button } from "./ui/button";
-import { CircleFadingArrowUpIcon } from "lucide-react"
+import { CircleFadingArrowUpIcon } from "lucide-react";
 import { useNavigation } from "@/store/NavigationContext";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPDFsFromAPI } from "@/lib/api";
 import Image from "next/image";
+import ToggleTheme from "./ToggleTheme";
 type Pdf = {
   id: string;
   pdf_id: string;
   filename: string;
 };
 
-
-
 const updatePDFs = (pdfs: Pdf[]): Pdf[] => {
-
-  return pdfs.map((pdf) => ({ 
+  return pdfs.map((pdf) => ({
     ...pdf,
     filename:
       pdf.filename.length > 20
@@ -26,78 +24,78 @@ const updatePDFs = (pdfs: Pdf[]): Pdf[] => {
         : pdf.filename,
   }));
 };
+
 const LeftPanel = () => {
   const { data: pdfs } = useQuery({
-  queryKey: ["pdfs"],
-  queryFn: fetchPDFsFromAPI,
-});
+    queryKey: ["pdfs"],
+    queryFn: fetchPDFsFromAPI,
+  });
 
   const { navigate } = useNavigation();
-  const updatedPDFs= updatePDFs(pdfs?? []);
+  const updatedPDFs = updatePDFs(pdfs ?? []);
 
   return (
-    <aside className="h-screen w-full bg-gray-900 gap-3 text-white flex flex-col justify-between py-4 px-2">
-      <div
-      className="flex justify-start flex-col"
-      >
-      {/* TOP */}
-        <div className="flex gap-2 justify-start items-center cursor-pointer text-xl font-bold mb-6"
-        onClick={()=>navigate("/")}
-        >
-          
+    <aside className="h-screen w-full bg-gray-100 dark:bg-gray-900 gap-3 text-gray-900 dark:text-white flex flex-col justify-between py-4 px-2 border-r border-gray-200 dark:border-gray-800">
+      <div className="flex justify-start flex-col">
+        {/* TOP */}
+        <div className="flex w-full justify-center items-center gap-2">
+        <div
+          className="flex gap-2 justify-start items-center cursor-pointer text-xl font-bold mb-6 text-gray-900 dark:text-white"
+          onClick={() => navigate("/")}
+          >
           <span>
             <Image
-            src="/logo.png"
-            width={50}
-            height={50}
-            alt="KnowPage Logo"
-            />
+              src="/logo.png"
+              width={50}
+              height={50}
+              alt="KnowPage Logo"
+              />
           </span>
           Know Page
-          </div>
+        </div>
+          <div className="w-15 h-15">
+
+        <ToggleTheme
+        padding={2}
+        
+        />
+
+        </div>
+              </div>
 
         <>
-          <div className="text-sm text-gray-400 mb-2">PDFs</div>
-      < div className="h-fit overflow-y-auto">
-
-        {/* PDFs Section */}
-
-          <div className="space-y-2">
-      <div className="">
-   
-
-<Button
-
-  variant="outline"
-  className="w-full flex items-center justify-center gap-2
-             hover:bg-blue-600 cursor-pointer hover:text-white hover:border-blue-600
-             transition"
-
-             onClick={()=>navigate("/dashboard/")}
->
-  <CircleFadingArrowUpIcon className="h-4 w-4" />
-  Upload PDF
-</Button>
-  </div>
-<div className="flex flex-col gap-2 overflow-y-auto max-h-[calc(100vh-140px)] pr-2">
-
-            {updatedPDFs.map((pdf,index) => (
-              <PdfListItem
-              key={index}
-              pdfName={pdf.filename}
-              pdf_id={pdf.pdf_id}
-              />
-            ))}
+          <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">PDFs</div>
+          <div className="h-fit overflow-y-auto">
+            <div className="space-y-2">
+              <div>
+                <Button
+                  variant="outline"
+                  className="w-full flex items-center justify-center gap-2
+                             border-gray-300 dark:border-gray-600
+                             text-gray-700 dark:text-gray-200
+                             bg-white dark:bg-gray-800
+                             hover:bg-blue-600 hover:text-white hover:border-blue-600
+                             dark:hover:bg-blue-600 dark:hover:text-white dark:hover:border-blue-600
+                             cursor-pointer transition"
+                  onClick={() => navigate("/dashboard/")}
+                >
+                  <CircleFadingArrowUpIcon className="h-4 w-4" />
+                  Upload PDF
+                </Button>
+              </div>
+              <div className="flex flex-col gap-2 overflow-y-auto max-h-[calc(100vh-140px)] pr-2">
+                {updatedPDFs.map((pdf, index) => (
+                  <PdfListItem
+                    key={index}
+                    pdfName={pdf.filename}
+                    pdf_id={pdf.pdf_id}
+                  />
+                ))}
+              </div>
             </div>
           </div>
-        
+        </>
       </div>
-
-            </>
-      </div>
-      {/* BOTTOM USER CARD */}
-    
-
     </aside>
   );
 };

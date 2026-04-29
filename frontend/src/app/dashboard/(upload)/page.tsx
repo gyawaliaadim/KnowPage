@@ -81,7 +81,9 @@ export default function Dashboard() {
                 </span>
               </div>
 
-              <button onClick={removeFile}>
+              <button 
+              className="cursor-pointer rounded-full p-2 hover:bg-gray-300 dark:hover:bg-gray-900 transition"
+              onClick={removeFile}>
                 <X className="w-4 h-4 text-red-500" />
               </button>
             </div>

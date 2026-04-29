@@ -3,7 +3,7 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { HamburgerMenuIcon } from '@radix-ui/react-icons';
-
+import { useTheme } from "next-themes";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,7 +19,7 @@ export default function Topbar({ className }: { className?: string }) {
   const pathname = usePathname();
     const { navigate } = useNavigation();
 
-
+  const { theme } = useTheme();
 
 
   const navLinks = [
@@ -67,10 +67,12 @@ export default function Topbar({ className }: { className?: string }) {
        <DropdownMenu>
   <DropdownMenuTrigger asChild>
     <button
-      className="rounded-full w-10 h-10 focus:ring-2 focus:ring-gray-300 cursor-pointer flex items-center justify-center bg-gray-800 overflow-hidden"
+      className="rounded-full w-10 h-10 focus:ring-2 focus:ring-gray-300 cursor-pointer flex items-center justify-center bg-gray-100 dark:bg-gray-800 overflow-hidden"
       aria-label="User menu"
     >
-      <HamburgerMenuIcon className="w-5 h-5 text-white" />
+      <HamburgerMenuIcon 
+      color={theme==="light"? "black":"white"}
+      className="w-5 h-5 text-black " />
     </button>
   </DropdownMenuTrigger>
 

@@ -28,6 +28,7 @@
         id: tempId,
         role: "user",
         content: question,
+        contexts: null,
       },
     ];
   });

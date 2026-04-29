@@ -12,11 +12,14 @@ interface NavigationContextType {
   setIsNavigating: (n: boolean) => void;
   setIsUploading: (b: boolean) => void;
   setIsResponding: (b: boolean) => void;
+  targetPage?: number;
+  setTargetPage: (page: number) => void;
 }
 
 const NavigationContext = createContext<NavigationContextType | undefined>(undefined);
 
 export function NavigationProvider({ children }: { children: React.ReactNode }) {
+  const [targetPage, setTargetPage] = useState<number>(1);
   const [isResponding, setIsResponding] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [isNavigating, setIsNavigating] = useState(false);
@@ -54,6 +57,7 @@ useEffect(() => {
   return (
     <NavigationContext.Provider
   value={{
+    targetPage,
     isNavigating,
     navigate,
     pathname,
@@ -62,6 +66,7 @@ useEffect(() => {
     setIsUploading,
     isResponding,
     setIsResponding,
+    setTargetPage
   }}
 >
       {children}
