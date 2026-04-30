@@ -14,7 +14,6 @@
 
 **KnowPage** is a Retrieval-Augmented Generation (RAG) application that lets you upload PDFs and interact with them through natural language. Instead of manually skimming long documents, you ask questions and get precise, sourced answers, grounded in your actual content, not generic AI guesses.
 
-> 🏆 Built for the **Hackspire Hackathon**
 
 </div>
 
