@@ -277,6 +277,6 @@ This project is licensed under the [MIT License](LICENSE).
 
 <div align="center">
 
-Made with ❤️ for Hackspire Hackathon
+Made with ❤️ by Aadim Gyawali
 
 </div>
