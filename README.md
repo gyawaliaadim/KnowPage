@@ -14,7 +14,7 @@ KnowPage is a Retrieval-Augmented Generation (RAG) application that lets you upl
 - 📄 **Upload & index** any PDF instantly
 - 💬 **Ask questions** in natural language
 - 🎯 **Context-aware answers** grounded in your document — not hallucinated
-- 🔍 **Source transparency** — every answer links back to the exact page and chunk it came from
+- 🔍 **Source transparency** — every answer links back to the exact page and chunk it came from where users can view it
 - ⚡ **No fine-tuning needed** — just upload and go
 
 ---
@@ -64,6 +64,7 @@ knowpage/
 - Node.js 18+
 - Python 3.10+
 - pip
+- ollama (tinyllama)
 
 ### 1. Clone the repository
 
@@ -83,6 +84,7 @@ npm run dev
 ### 3. Start the Backend API
 
 ```bash
+# In a new terminal, from the project root
 cd backend
 pip install -r requirements.txt
 uvicorn app.main:app --reload --port 8000
@@ -93,11 +95,48 @@ uvicorn app.main:app --reload --port 8000
 ```bash
 # In a new terminal, from the project root
 cd backend
-uvicorn nl.main:app --port 8001
+uvicorn ml.main:app --port 8001
+```
+
+### 5. Start ollama and install tinyllama model
+
+```bash
+ollama run tinyllama
 ```
 
 All three services need to be running simultaneously. Once up, open [http://localhost:3000](http://localhost:3000) in your browser.
 
+### Installation Using Docker
+
+### 1. Go to ./backend/app/core/config.py and change 
+
+```python
+LLM_URL = "http://ollama:11434"
+MODEL_URL = "http://ml:8001"
+```
+
+### 2. Run Docker Compose
+```bash
+docker compose up
+# After running stop it
+docker compose stop
+```
+
+### 3. Install tinyllama
+```bash
+docker ps
+docker exec -it knowpage-ollama-1 ollama pull tinyllama
+```
+
+### 4. Initiate DB if not initiated
+```bash
+docker exec -it knowpage-backend-1 python -m app.scripts.init_db
+```
+
+### 5. Run Docker compose again
+```bash
+docker compose up
+```
 ---
 
 ## 🔄 Request Flow
